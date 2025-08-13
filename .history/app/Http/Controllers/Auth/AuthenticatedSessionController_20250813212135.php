@@ -16,17 +16,22 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
+        // Menampilkan halaman login
         return view('auth.login');
     }
 
     /**
+     * Handle an incoming authentication request.
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // Memvalidasi dan mengautentikasi user
         $request->authenticate();
 
+        // Regenerasi session untuk keamanan
         $request->session()->regenerate();
 
+        // Arahkan ke dashboard setelah login berhasil
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
@@ -35,12 +40,16 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // Logout user
         Auth::guard('web')->logout();
 
+        // Invalidasi session lama
         $request->session()->invalidate();
 
+        // Regenerasi token CSRF
         $request->session()->regenerateToken();
 
+        // Arahkan ke halaman utama
         return redirect('/');
     }
 }

@@ -16,13 +16,16 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
+        // Menampilkan halaman login
         return view('auth.login');
     }
 
     /**
+     * Handle an incoming authentication request.
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // Memvalidasi dan mengautentikasi user
         $request->authenticate();
 
         $request->session()->regenerate();
